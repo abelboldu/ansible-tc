@@ -57,7 +57,14 @@ try:
 except ImportError:
     HAS_PYTHON_TCCONFIG = False
 
-def add_control():
+def add_control(data):
+
+    device = data['device']
+
+    # preliminar sample
+    # tc = tcconfig.traffic_control.TrafficControl('eth1','outgoing','1M',shaping_algorithm='htb')
+
+def del_control(data=None):
 
 
 def main():
@@ -69,12 +76,16 @@ def main():
         mutually_exclusive = []
     )
 
-    device = module.params['device']
 
-    # Do stuff
+
+    choice_map = {
+        "present": add_control,
+        "absent": del_control,
+    }
 
     changed = False
     res_args = dict()
+    is_error, has_changed, result = choice_map.get(module.params['state'])(module.params)
 
 
 if __name__ == "__main__":
